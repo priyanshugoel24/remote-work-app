@@ -1,12 +1,24 @@
-import { clerkMiddleware } from '@clerk/nextjs/server'
+import { clerkMiddleware } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-export default clerkMiddleware()
+const publicRoutes = ["/sign-in", "/sign-up"];
+
+export default clerkMiddleware(async (auth, req) => {  
+  const { userId } = await auth(); 
+
+  // Redirect unauthenticated users trying to access protected routes
+  if (!userId && !publicRoutes.includes(req.nextUrl.pathname)) {
+    return NextResponse.redirect(new URL("/sign-in", req.url));
+  }
+
+  // Redirect authenticated users away from login/signup pages
+  if (userId && publicRoutes.includes(req.nextUrl.pathname)) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  return NextResponse.next(); // Continue with the request
+});
 
 export const config = {
-  matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    // Always run for API routes
-    '/(api|trpc)(.*)',
-  ],
-}
+  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
+};
