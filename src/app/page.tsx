@@ -75,8 +75,8 @@ const HomePage = () => {
           </section>
           
           {/* Right Section - Calendar */}
-          <aside>
-            <CalendarEvents></CalendarEvents>
+          <aside className="space-y-4">
+            <CalendarEvents />
           </aside>
         </main>
       </div>

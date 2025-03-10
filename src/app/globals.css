@@ -23,3 +23,50 @@ body {
 html, body {
   overscroll-behavior: none;
 }
+
+/* Add these styles to customize the date picker */
+.react-datepicker {
+  @apply bg-white dark:bg-gray-800 border dark:border-gray-700 shadow-lg;
+}
+
+.react-datepicker__header {
+  @apply bg-gray-50 dark:bg-gray-750 border-b dark:border-gray-700;
+}
+
+.react-datepicker__time-container {
+  @apply border-l dark:border-gray-700;
+}
+
+.react-datepicker__time {
+  @apply bg-white dark:bg-gray-800;
+}
+
+.react-datepicker__time-box {
+  @apply dark:border-gray-700;
+}
+
+.react-datepicker__time-list-item {
+  @apply text-gray-900 dark:text-gray-200 hover:bg-blue-500 hover:text-white !important;
+}
+
+.react-datepicker__time-list-item--selected {
+  @apply bg-blue-500 text-white !important;
+}
+
+.react-datepicker__day {
+  @apply text-gray-900 dark:text-gray-200 hover:bg-blue-500 hover:text-white;
+}
+
+.react-datepicker__day--selected {
+  @apply bg-blue-500 text-white;
+}
+
+.react-datepicker__day--keyboard-selected {
+  @apply bg-blue-500 text-white;
+}
+
+.react-datepicker__current-month,
+.react-datepicker-time__header,
+.react-datepicker__day-name {
+  @apply text-gray-900 dark:text-gray-200;
+}

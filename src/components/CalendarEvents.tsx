@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import { useUser, useAuth } from "@clerk/nextjs";
+import toast from 'react-hot-toast';
 
 const CalendarEvents = () => {
   const { user, isSignedIn } = useUser();
@@ -69,6 +70,58 @@ const CalendarEvents = () => {
       )}
     </div>
   );
+};
+
+export const handleCreateEvent = async (eventData: any) => {
+  const promise = fetch('/api/google-calendar/create', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(eventData),
+  }).then(async (res) => {
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to create event');
+    return data; // Should include { id: string, event: object }
+  });
+
+  return toast.promise(promise, {
+    loading: 'Creating event...',
+    success: 'Event created successfully!',
+    error: (err) => `Error: ${err.message}`,
+  });
+};
+
+export const handleUpdateEvent = async (eventData: any) => {
+  const promise = fetch('/api/google-calendar/update', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(eventData),
+  }).then(async (res) => {
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to update event');
+    return data;
+  });
+
+  return toast.promise(promise, {
+    loading: 'Updating event...',
+    success: 'Event updated successfully!',
+    error: (err) => `Error: ${err.message}`,
+  });
+};
+
+export const handleDeleteEvent = async (eventId: string) => {
+  const promise = fetch(`/api/google-calendar/delete?id=${eventId}`, {
+    method: 'DELETE',
+  }).then(async (res) => {
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to delete event');
+    return data;
+  });
+
+  return toast.promise(promise, {
+    loading: 'Deleting event...',
+    success: 'Event deleted successfully!',
+    error: (err) => `Error: ${err.message}`,
+  });
 };
 
 export default CalendarEvents;
